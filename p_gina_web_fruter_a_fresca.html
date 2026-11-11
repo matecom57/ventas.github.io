@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frutería Don Manolo - Frutas y Verduras Frescas</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts (Outfit & Plus Jakarta Sans) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            green: '#1b4332',
+                            lightgreen: '#2d6a4f',
+                            lime: '#52b788',
+                            softgreen: '#d8f3dc',
+                            orange: '#ff7b00',
+                            accent: '#ffb703',
+                            cream: '#f8f9fa'
+                        }
+                    },
+                    fontFamily: {
+                        title: ['Outfit', 'sans-serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar and animations */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #52b788;
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2d6a4f;
+        }
+        .badge-pulse {
+            animation: pulse-subtle 2s infinite;
+        }
+        @keyframes pulse-subtle {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body class="font-sans text-gray-800 bg-slate-50 antialiased flex flex-col min-h-screen">
+
+    <!-- BARRA SUPERIOR DE ANUNCIOS -->
+    <div class="bg-brand-green text-white text-xs sm:text-sm py-2 px-4 text-center font-medium">
+        <span class="inline-block mr-2">🚀</span> ¡Envíos GRATIS en tu primera compra usando el código <strong class="text-brand-accent">FRESCO2026</strong>!
+    </div>
+
+    <!-- NAVBAR -->
+    <header class="sticky top-0 z-40 glass-nav border-b border-gray-100 shadow-sm transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- LOGO -->
+            <a href="#" class="flex items-center gap-2 group">
+                <div class="w-11 h-11 rounded-2xl bg-brand-lime flex items-center justify-center text-white text-2xl shadow-md group-hover:scale-105 transition-transform">
+                    🍉
+                </div>
+                <div>
+                    <span class="font-title text-2xl font-extrabold text-brand-green tracking-tight block leading-none">Don Manolo</span>
+                    <span class="text-xs text-brand-orange font-semibold tracking-widest uppercase">Frutería & Campo</span>
+                </div>
+            </a>
+
+            <!-- NAVEGACIÓN DESKTOP -->
+            <nav class="hidden md:flex items-center gap-8 font-semibold text-gray-700">
+                <a href="#inicio" class="hover:text-brand-lime transition-colors">Inicio</a>
+                <a href="#productos" class="hover:text-brand-lime transition-colors">Productos</a>
+                <a href="#nosotros" class="hover:text-brand-lime transition-colors">¿Por qué nosotros?</a>
+                <a href="#ubicacion" class="hover:text-brand-lime transition-colors">Ubicación</a>
+            </nav>
+
+            <!-- BOTONES ACCIÓN & CARRITO -->
+            <div class="flex items-center gap-4">
+                <!-- Botón Carrito con contador -->
+                <button onclick="toggleCartDrawer()" class="relative p-3 bg-brand-softgreen text-brand-green rounded-xl hover:bg-brand-lime hover:text-white transition-all shadow-sm">
+                    <i class="fa-solid fa-basket-shopping text-xl"></i>
+                    <span id="cart-count" class="absolute -top-1 -right-1 bg-brand-orange text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center border-2 border-white">0</span>
+                </button>
+
+                <!-- Botón WhatsApp Directo -->
+                <a href="https://wa.me/1234567890?text=Hola,%20me%20gustaría%20hacer%20un%20pedido." target="_blank" class="hidden sm:flex items-center gap-2 bg-emerald-600 text-white px-4 py-2.5 rounded-xl font-bold hover:bg-emerald-700 transition-all shadow-md shadow-emerald-200">
+                    <i class="fa-brands fa-whatsapp text-lg"></i>
+                    <span>Pedidos</span>
+                </a>
+
+                <!-- Menú Móvil Botón -->
+                <button id="mobile-menu-btn" class="md:hidden p-2 text-gray-700 hover:text-brand-green">
+                    <i class="fa-solid fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- MENU MÓVIL DESPLEGABLE -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-gray-100 bg-white px-4 pt-3 pb-6 space-y-3">
+            <a href="#inicio" onclick="toggleMobileMenu()" class="block py-2 font-semibold text-gray-700 hover:text-brand-lime">Inicio</a>
+            <a href="#productos" onclick="toggleMobileMenu()" class="block py-2 font-semibold text-gray-700 hover:text-brand-lime">Productos</a>
+            <a href="#nosotros" onclick="toggleMobileMenu()" class="block py-2 font-semibold text-gray-700 hover:text-brand-lime">¿Por qué nosotros?</a>
+            <a href="#ubicacion" onclick="toggleMobileMenu()" class="block py-2 font-semibold text-gray-700 hover:text-brand-lime">Ubicación y Horarios</a>
+            <a href="https://wa.me/1234567890" target="_blank" class="flex items-center justify-center gap-2 bg-emerald-600 text-white py-3 rounded-xl font-bold w-full mt-2">
+                <i class="fa-brands fa-whatsapp text-lg"></i> Contactar por WhatsApp
+            </a>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        <!-- 1. HERO SECTION -->
+        <section id="inicio" class="relative bg-gradient-to-br from-emerald-900 via-brand-green to-teal-950 text-white overflow-hidden py-16 lg:py-24">
+            <!-- Elementos de fondo decorativos -->
+            <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#52b788_1px,transparent_1px)] [background-size:16px_16px]"></div>
+            <div class="absolute -top-24 -right-24 w-96 h-96 bg-brand-lime opacity-20 rounded-full filter blur-3xl"></div>
+            <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-brand-orange opacity-20 rounded-full filter blur-3xl"></div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-brand-softgreen text-xs sm:text-sm font-semibold">
+                        <span class="flex h-2 w-2 rounded-full bg-emerald-400 animate-ping"></span>
+                        ¡Cosecha del día recibida hoy a las 5:00 AM! 🍎
+                    </div>
+                    <h1 class="font-title text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight">
+                        La frescura del campo <br>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-accent to-brand-orange">directo a tu mesa</span>
+                    </h1>
+                    <p class="text-slate-200 text-base sm:text-lg max-w-xl mx-auto lg:mx-0 font-sans">
+                        Frutas maduradas al sol, verduras crujientes y canastas saludables. Garantizamos la máxima calidad y sabor en cada pedido.
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
+                        <a href="#productos" class="bg-brand-orange text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-orange-600 transition-all transform hover:-translate-y-1 shadow-lg shadow-orange-900/30 text-center flex items-center justify-center gap-2">
+                            <span>Ver Catálogo</span>
+                            <i class="fa-solid fa-arrow-down text-sm"></i>
+                        </a>
+                        <a href="https://wa.me/1234567890?text=Hola,%20quiero%20hacer%20un%20pedido" target="_blank" class="bg-white/10 hover:bg-white/20 border border-white/30 text-white px-8 py-4 rounded-xl font-bold text-lg backdrop-blur-md transition-all text-center flex items-center justify-center gap-2">
+                            <i class="fa-brands fa-whatsapp text-xl text-emerald-400"></i>
+                            <span>Pedir por WhatsApp</span>
+                        </a>
+                    </div>
+
+                    <!-- Métricas rápidas -->
+                    <div class="pt-8 border-t border-white/10 grid grid-cols-3 gap-4 text-center lg:text-left">
+                        <div>
+                            <p class="font-title text-2xl sm:text-3xl font-bold text-brand-accent">100%</p>
+                            <p class="text-xs sm:text-sm text-slate-300">Orgánico & Natural</p>
+                        </div>
+                        <div>
+                            <p class="font-title text-2xl sm:text-3xl font-bold text-brand-accent">&lt; 2 hrs</p>
+                            <p class="text-xs sm:text-sm text-slate-300">Envío Exprés</p>
+                        </div>
+                        <div>
+                            <p class="font-title text-2xl sm:text-3xl font-bold text-brand-accent">+2,500</p>
+                            <p class="text-xs sm:text-sm text-slate-300">Clientes Felices</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Imagen Hero con Badges -->
+                <div class="relative flex justify-center">
+                    <div class="relative w-full max-w-md lg:max-w-none">
+                        <img src="https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=800&q=80" alt="Frutas Frescas Variadas" class="rounded-3xl shadow-2xl object-cover w-full h-[400px] lg:h-[480px] border-4 border-white/20">
+                        
+                        <!-- Floating Badges -->
+                        <div class="absolute -bottom-5 -left-5 bg-white text-gray-800 p-4 rounded-2xl shadow-xl flex items-center gap-3 border border-gray-100 hidden sm:flex">
+                            <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center text-2xl">
+                                🚚
+                            </div>
+                            <div>
+                                <p class="font-bold text-sm">Entregas el mismo día</p>
+                                <p class="text-xs text-gray-500">Empacado con cuidado</p>
+                            </div>
+                        </div>
+
+                        <div class="absolute -top-5 -right-5 bg-brand-orange text-white px-5 py-3 rounded-2xl shadow-xl font-bold badge-pulse text-center">
+                            <span class="block text-xs uppercase tracking-wider">Descuento</span>
+                            <span class="text-lg">20% OFF en Combos</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. SECCIÓN DE PRODUCTOS DESTACADOS & CARRITO INTEGRADO -->
+        <section id="productos" class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <span class="text-brand-orange font-bold uppercase tracking-wider text-sm">Selección Fresca Diaria</span>
+                <h2 class="font-title text-3xl sm:text-4xl font-extrabold text-brand-green mt-1">Nuestros Productos Destacados</h2>
+                <p class="text-gray-600 mt-2">Seleccionamos manualmente cada pieza de fruta y verdura para asegurarte solo lo mejor.</p>
+                
+                <!-- Filtros por categoría -->
+                <div class="flex flex-wrap justify-center gap-2 mt-6" id="category-filters">
+                    <button onclick="filterProducts('all')" class="filter-btn active bg-brand-green text-white px-5 py-2 rounded-xl text-sm font-semibold transition-all">Todos</button>
+                    <button onclick="filterProducts('frutas')" class="filter-btn bg-white text-gray-700 hover:bg-gray-100 border border-gray-200 px-5 py-2 rounded-xl text-sm font-semibold transition-all">🍎 Frutas</button>
+                    <button onclick="filterProducts('verduras')" class="filter-btn bg-white text-gray-700 hover:bg-gray-100 border border-gray-200 px-5 py-2 rounded-xl text-sm font-semibold transition-all">🥦 Verduras</button>
+                    <button onclick="filterProducts('combos')" class="filter-btn bg-white text-gray-700 hover:bg-gray-100 border border-gray-200 px-5 py-2 rounded-xl text-sm font-semibold transition-all">🧺 Canastas & Combos</button>
+                </div>
+            </div>
+
+            <!-- Grid de Productos -->
+            <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+                <!-- Se poblará dinámicamente con JS -->
+            </div>
+        </section>
+
+        <!-- 3. SECCIÓN BENEFICIOS / POR QUÉ ELEGIRNOS -->
+        <section id="nosotros" class="bg-brand-softgreen/40 py-16 border-y border-emerald-100">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-2xl mx-auto mb-12">
+                    <h2 class="font-title text-3xl font-extrabold text-brand-green">¿Por qué elegir Frutería Don Manolo?</h2>
+                    <p class="text-gray-600 mt-2">Nos apasiona llevar salud y sabor a las familias de nuestra comunidad.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Card 1 -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-emerald-100/60 hover:shadow-md transition-shadow text-center">
+                        <div class="w-16 h-16 bg-emerald-100 text-brand-green rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4">
+                            🌱
+                        </div>
+                        <h3 class="font-title text-xl font-bold text-gray-900 mb-2">100% Orgánico y Fresco</h3>
+                        <p class="text-gray-600 text-sm">Productos cosechados en su punto óptimo de maduración, sin químicos agresivos.</p>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-emerald-100/60 hover:shadow-md transition-shadow text-center">
+                        <div class="w-16 h-16 bg-amber-100 text-brand-orange rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4">
+                            ⚡
+                        </div>
+                        <h3 class="font-title text-xl font-bold text-gray-900 mb-2">Entrega Rápida a Domicilio</h3>
+                        <p class="text-gray-600 text-sm">Haz tu pedido antes de las 2:00 PM y recíbelo hoy mismo en la puerta de tu hogar.</p>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-emerald-100/60 hover:shadow-md transition-shadow text-center">
+                        <div class="w-16 h-16 bg-green-100 text-green-700 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4">
+                            👨‍🌾
+                        </div>
+                        <h3 class="font-title text-xl font-bold text-gray-900 mb-2">Apoyo al Campo Local</h3>
+                        <p class="text-gray-600 text-sm">Trabajamos directamente con pequeños agricultores locales garantizando precios justos.</p>
+                    </div>
+
+                    <!-- Card 4 -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-emerald-100/60 hover:shadow-md transition-shadow text-center">
+                        <div class="w-16 h-16 bg-rose-100 text-rose-600 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4">
+                            🛡️
+                        </div>
+                        <h3 class="font-title text-xl font-bold text-gray-900 mb-2">Garantía de Calidad</h3>
+                        <p class="text-gray-600 text-sm">Si algún producto no cumple con tus expectativas de frescura, te lo reemplazamos gratis.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. CALCULADORA DE COMBOS / ARMADO DE CANASTA PERSONALIZADA -->
+        <section class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-gradient-to-r from-brand-green to-teal-800 rounded-3xl text-white p-8 sm:p-12 shadow-xl relative overflow-hidden">
+                <div class="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <span class="bg-brand-orange text-white text-xs font-bold uppercase px-3 py-1 rounded-full">Personalizado</span>
+                        <h2 class="font-title text-3xl sm:text-4xl font-extrabold mt-4">Arma tu Canasta Semanal</h2>
+                        <p class="text-slate-200 mt-2">¿Necesitas algo específico para tu familia o tu negocio? Selecciona los kilos que desees o pídela directamente a nuestro equipo.</p>
+                        
+                        <ul class="mt-6 space-y-3 text-sm text-slate-200">
+                            <li class="flex items-center gap-2">
+                                <i class="fa-solid fa-check text-brand-lime"></i> Eliges solo las frutas y verduras que te gustan.
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i class="fa-solid fa-check text-brand-lime"></i> Empacadas en caja ecológica reutilizable.
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <i class="fa-solid fa-check text-brand-lime"></i> 10% de descuento en pedidos mayores a $30.
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-white text-gray-800 p-6 rounded-2xl shadow-lg">
+                        <h3 class="font-title text-xl font-bold text-brand-green mb-4">Solicitud de Cotización Rápida</h3>
+                        <form id="custom-basket-form" onsubmit="sendCustomBasket(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nombre</label>
+                                <input type="text" id="custom-name" required placeholder="Tu nombre" class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-lime text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">¿Qué necesitas en tu canasta?</label>
+                                <textarea id="custom-details" required rows="3" placeholder="Ej: 2kg Manzanas, 1kg Aguacate, 1 Canasta de Fresa..." class="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-lime text-sm"></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-xl transition-all flex items-center justify-center gap-2">
+                                <i class="fa-brands fa-whatsapp text-lg"></i>
+                                Cotizar por WhatsApp
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. UBICACIÓN, HORARIOS Y CONTACTO -->
+        <section id="ubicacion" class="py-16 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    
+                    <!-- Info & Horarios -->
+                    <div>
+                        <span class="text-brand-orange font-bold uppercase tracking-wider text-sm">Visítanos</span>
+                        <h2 class="font-title text-3xl font-extrabold text-brand-green mt-1 mb-6">Ubicación y Horarios de Atención</h2>
+                        
+                        <div class="space-y-6 text-gray-600">
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 bg-brand-softgreen text-brand-green rounded-xl flex items-center justify-center text-xl shrink-0">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-900">Dirección Principal</h4>
+                                    <p class="text-sm">Av. Central del Campo #456, Mercado Central, Local 12</p>
+                                    <p class="text-xs text-gray-400 mt-1">Estacionamiento gratuito para clientes.</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 bg-amber-100 text-amber-700 rounded-xl flex items-center justify-center text-xl shrink-0">
+                                    <i class="fa-solid fa-clock"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-900">Horario de Servicio</h4>
+                                    <p class="text-sm">Lunes a Sábado: 7:00 AM - 7:00 PM</p>
+                                    <p class="text-sm">Domingos: 8:00 AM - 2:00 PM</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center text-xl shrink-0">
+                                    <i class="fa-solid fa-phone"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-900">Contacto Directo</h4>
+                                    <p class="text-sm">Teléfono: +54 11 9876-5432</p>
+                                    <p class="text-sm">WhatsApp: +54 11 1234-5678</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Mapa ficticio o representativo -->
+                        <div class="mt-8 rounded-2xl overflow-hidden border border-gray-200 h-48 bg-slate-100 relative flex items-center justify-center">
+                            <img src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover opacity-60" alt="Mapa de ubicación">
+                            <a href="https://maps.google.com" target="_blank" class="absolute bg-white text-brand-green px-4 py-2 rounded-xl font-bold shadow-md hover:bg-brand-softgreen transition-all flex items-center gap-2 text-sm">
+                                <i class="fa-solid fa-map-location-dot"></i> Abrir en Google Maps
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Formulario de Contacto -->
+                    <div class="bg-slate-50 p-8 rounded-3xl border border-gray-200 shadow-sm">
+                        <h3 class="font-title text-2xl font-bold text-brand-green mb-2">Envíanos un mensaje</h3>
+                        <p class="text-gray-600 text-sm mb-6">¿Tienes dudas sobre venta al mayoreo o eventos? Escríbenos y te responderemos pronto.</p>
+                        
+                        <form id="contact-form" onsubmit="handleContactSubmit(event)" class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Nombre Completo</label>
+                                <input type="text" required placeholder="Ej: María García" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-lime bg-white text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Correo Electrónico</label>
+                                <input type="email" required placeholder="tu@email.com" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-lime bg-white text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Mensaje</label>
+                                <textarea required rows="4" placeholder="Escribe tu consulta aquí..." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-brand-lime bg-white text-sm"></textarea>
+                            </div>
+                            <button type="submit" class="w-full bg-brand-green hover:bg-brand-lightgreen text-white font-bold py-3.5 rounded-xl transition-all shadow-md">
+                                Enviar Consulta
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 6. FOOTER -->
+    <footer class="bg-brand-green text-white border-t border-emerald-950">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                
+                <!-- Columna 1: Brand -->
+                <div class="space-y-4 md:col-span-1">
+                    <div class="flex items-center gap-2">
+                        <div class="w-9 h-9 rounded-xl bg-brand-lime flex items-center justify-center text-white text-xl">🍉</div>
+                        <span class="font-title text-xl font-bold tracking-tight">Don Manolo</span>
+                    </div>
+                    <p class="text-slate-300 text-xs leading-relaxed">
+                        Comprometidos con la frescura, el sabor natural y la salud de tu hogar. Frutas y verduras seleccionadas a diario.
+                    </p>
+                    <div class="flex gap-3 pt-2">
+                        <a href="#" class="w-8 h-8 rounded-lg bg-white/10 hover:bg-brand-orange flex items-center justify-center transition-colors text-sm"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-lg bg-white/10 hover:bg-brand-orange flex items-center justify-center transition-colors text-sm"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-lg bg-white/10 hover:bg-brand-orange flex items-center justify-center transition-colors text-sm"><i class="fa-brands fa-whatsapp"></i></a>
+                    </div>
+                </div>
+
+                <!-- Columna 2: Enlaces -->
+                <div>
+                    <h4 class="font-title font-bold text-sm text-brand-accent uppercase tracking-wider mb-4">Enlaces Rápidos</h4>
+                    <ul class="space-y-2 text-xs text-slate-300">
+                        <li><a href="#inicio" class="hover:text-white transition-colors">Inicio</a></li>
+                        <li><a href="#productos" class="hover:text-white transition-colors">Catálogo de Productos</a></li>
+                        <li><a href="#nosotros" class="hover:text-white transition-colors">¿Por qué elegirmos?</a></li>
+                        <li><a href="#ubicacion" class="hover:text-white transition-colors">Ubicación y Horarios</a></li>
+                    </ul>
+                </div>
+
+                <!-- Columna 3: Productos -->
+                <div>
+                    <h4 class="font-title font-bold text-sm text-brand-accent uppercase tracking-wider mb-4">Categorías</h4>
+                    <ul class="space-y-2 text-xs text-slate-300">
+                        <li><a href="#productos" onclick="filterProducts('frutas')" class="hover:text-white transition-colors">Frutas de Temporada</a></li>
+                        <li><a href="#productos" onclick="filterProducts('verduras')" class="hover:text-white transition-colors">Verduras Orgánicas</a></li>
+                        <li><a href="#productos" onclick="filterProducts('combos')" class="hover:text-white transition-colors">Canastas & Combos</a></li>
+                        <li><a href="#productos" class="hover:text-white transition-colors">Ofertas de la Semana</a></li>
+                    </ul>
+                </div>
+
+                <!-- Columna 4: Boletín -->
+                <div>
+                    <h4 class="font-title font-bold text-sm text-brand-accent uppercase tracking-wider mb-4">Ofertas en tu correo</h4>
+                    <p class="text-xs text-slate-300 mb-3">Recibe nuestro catálogo semanal de ofertas y descuentos exclusivos.</p>
+                    <form onsubmit="event.preventDefault(); showToast('¡Gracias por suscribirte!');" class="flex gap-2">
+                        <input type="email" required placeholder="Tu correo" class="px-3 py-2 text-xs rounded-lg bg-white/10 text-white placeholder-slate-400 border border-white/20 focus:outline-none focus:ring-1 focus:ring-brand-lime w-full">
+                        <button type="submit" class="bg-brand-orange hover:bg-orange-600 px-3 py-2 rounded-lg text-xs font-bold transition-colors">Unirse</button>
+                    </form>
+                </div>
+
+            </div>
+
+            <div class="border-t border-white/10 mt-10 pt-6 text-center text-xs text-slate-400 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <p>&copy; 2026 Frutería Don Manolo. Todos los derechos reservados.</p>
+                <p class="flex items-center gap-1">Hecho con <i class="fa-solid fa-heart text-rose-500"></i> para un estilo de vida saludable.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- CART DRAWER (SLIDE-OVER INTERACTIVO) -->
+    <div id="cart-drawer" class="fixed inset-0 z-50 overflow-hidden hidden" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
+        <div class="absolute inset-0 bg-gray-900 bg-opacity-50 transition-opacity backdrop-blur-sm" onclick="toggleCartDrawer()"></div>
+
+        <div class="fixed inset-y-0 right-0 max-w-full flex pl-10">
+            <div class="w-screen max-w-md bg-white shadow-2xl flex flex-col">
+                <!-- Header Carrito -->
+                <div class="p-6 bg-brand-green text-white flex items-center justify-between">
+                    <h2 class="font-title text-xl font-bold flex items-center gap-2">
+                        <i class="fa-solid fa-basket-shopping"></i> Tu Pedido
+                    </h2>
+                    <button onclick="toggleCartDrawer()" class="text-white hover:text-brand-accent transition-colors">
+                        <i class="fa-solid fa-xmark text-2xl"></i>
+                    </button>
+                </div>
+
+                <!-- Items del Carrito -->
+                <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4">
+                    <!-- Se renderiza con JS -->
+                </div>
+
+                <!-- Footer del Carrito (Totales y WhatsApp) -->
+                <div class="p-6 border-t border-gray-100 bg-slate-50 space-y-4">
+                    <div class="flex justify-between text-base font-bold text-gray-900">
+                        <span>Total estimado:</span>
+                        <span id="cart-total" class="text-brand-green text-xl">$0.00</span>
+                    </div>
+                    <p class="text-xs text-gray-500">El pago se realiza al momento de la entrega (Efectivo o Transferencia).</p>
+                    
+                    <button onclick="checkoutWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2">
+                        <i class="fa-brands fa-whatsapp text-xl"></i>
+                        <span>Confirmar Pedido por WhatsApp</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICACIÓN -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 bg-gray-900 text-white px-5 py-3 rounded-xl shadow-xl flex items-center gap-3 transform translate-y-20 opacity-0 transition-all duration-300">
+        <span id="toast-icon" class="text-emerald-400 text-xl"><i class="fa-solid fa-circle-check"></i></span>
+        <span id="toast-message" class="text-sm font-medium">Producto añadido</span>
+    </div>
+
+    <!-- JAVASCRIPT DE LA APLICACIÓN -->
+    <script>
+        // BASE DE DATOS DE PRODUCTOS
+        const products = [
+            {
+                id: 1,
+                name: "Manzana Red Delicious",
+                category: "frutas",
+                price: 2.50,
+                unit: "kg",
+                badge: "¡Fresco!",
+                badgeColor: "bg-emerald-500",
+                image: "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?auto=format&fit=crop&w=500&q=80",
+                desc: "Jugosas, dulces y crujientes. Ideales para colaciones."
+            },
+            {
+                id: 2,
+                name: "Aguacate Hass Extra",
+                category: "verduras",
+                price: 4.20,
+                unit: "kg",
+                badge: "Top Ventas",
+                badgeColor: "bg-amber-500",
+                image: "https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?auto=format&fit=crop&w=500&q=80",
+                desc: "Cremosos y en su punto exacto de maduración."
+            },
+            {
+                id: 3,
+                name: "Canasta Familiar Vitality",
+                category: "combos",
+                price: 24.99,
+                unit: "pack",
+                badge: "Oferta -15%",
+                badgeColor: "bg-rose-500",
+                image: "https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=500&q=80",
+                desc: "Incluye 3kg frutas variadas + 4kg verduras de la estación."
+            },
+            {
+                id: 4,
+                name: "Plátanos Canarios",
+                category: "frutas",
+                price: 1.80,
+                unit: "kg",
+                badge: "¡Fresco!",
+                badgeColor: "bg-emerald-500",
+                image: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?auto=format&fit=crop&w=500&q=80",
+                desc: "Ricos en potasio y dulzor natural garantizado."
+            },
+            {
+                id: 5,
+                name: "Tomate Saladette",
+                category: "verduras",
+                price: 1.95,
+                unit: "kg",
+                badge: "Orgánico",
+                badgeColor: "bg-emerald-600",
+                image: "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?auto=format&fit=crop&w=500&q=80",
+                desc: "Firmes y de color rojo intenso, ideales para ensaladas."
+            },
+            {
+                id: 6,
+                name: "Fresas Dulces de Huerta",
+                category: "frutas",
+                price: 3.50,
+                unit: "canasta (500g)",
+                badge: "Temporada",
+                badgeColor: "bg-purple-500",
+                image: "https://images.unsplash.com/photo-1464965911861-746a04b4bca6?auto=format&fit=crop&w=500&q=80",
+                desc: "Aromáticas, seleccionadas una a una."
+            },
+            {
+                id: 7,
+                name: "Naranjas de Jugo",
+                category: "frutas",
+                price: 1.60,
+                unit: "kg",
+                badge: "Super Precio",
+                badgeColor: "bg-brand-orange",
+                image: "https://images.unsplash.com/photo-1611080626919-7cf5a9dbab5b?auto=format&fit=crop&w=500&q=80",
+                desc: "Abundante jugo dulce rico en Vitamina C."
+            },
+            {
+                id: 8,
+                name: "Combo Desayuno Verde",
+                category: "combos",
+                price: 14.50,
+                unit: "pack",
+                badge: "Popular",
+                badgeColor: "bg-amber-500",
+                image: "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=500&q=80",
+                desc: "Espinaca, Manzana verde, Pepino, Limón y Jengibre."
+            }
+        ];
+
+        // ESTADO DEL CARRITO
+        let cart = [];
+
+        // RENDERIZAR PRODUCTOS
+        function renderProducts(itemsToRender = products) {
+            const container = document.getElementById('products-grid');
+            container.innerHTML = '';
+
+            itemsToRender.forEach(prod => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col group";
+                
+                card.innerHTML = `
+                    <div class="relative overflow-hidden h-48 bg-gray-100">
+                        <img src="${prod.image}" alt="${prod.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/400x300/e2e8f0/1e293b?text=Fruta+Fresca'">
+                        <span class="absolute top-3 left-3 ${prod.badgeColor} text-white text-xs font-bold px-2.5 py-1 rounded-full shadow">
+                            ${prod.badge}
+                        </span>
+                    </div>
+                    <div class="p-5 flex-1 flex flex-col justify-between space-y-3">
+                        <div>
+                            <h3 class="font-title text-lg font-bold text-gray-900 group-hover:text-brand-green transition-colors">${prod.name}</h3>
+                            <p class="text-gray-500 text-xs mt-1 line-clamp-2">${prod.desc}</p>
+                        </div>
+                        <div class="flex items-center justify-between pt-2 border-t border-gray-50">
+                            <div>
+                                <span class="text-xs text-gray-400 block">Precio por ${prod.unit}</span>
+                                <span class="font-title text-xl font-extrabold text-brand-green">$${prod.price.toFixed(2)}</span>
+                            </div>
+                            <button onclick="addToCart(${prod.id})" class="bg-brand-softgreen text-brand-green hover:bg-brand-lime hover:text-white px-3.5 py-2 rounded-xl font-bold transition-colors flex items-center gap-1.5 text-sm">
+                                <i class="fa-solid fa-cart-plus"></i>
+                                <span>Agregar</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // FILTRADO DE PRODUCTOS
+        function filterProducts(category) {
+            // Actualizar botones
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-brand-green', 'text-white', 'active');
+                btn.classList.add('bg-white', 'text-gray-700');
+            });
+
+            event.target.classList.remove('bg-white', 'text-gray-700');
+            event.target.classList.add('bg-brand-green', 'text-white', 'active');
+
+            if (category === 'all') {
+                renderProducts(products);
+            } else {
+                const filtered = products.filter(p => p.category === category);
+                renderProducts(filtered);
+            }
+        }
+
+        // FUNCIONALIDADES CARRITO
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existing = cart.find(item => item.id === productId);
+
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+
+            updateCartUI();
+            showToast(`¡${product.name} agregado al carrito!`);
+        }
+
+        function updateQuantity(productId, change) {
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    cart = cart.filter(i => i.id !== productId);
+                }
+            }
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            // Contador
+            const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cart-count').innerText = totalCount;
+
+            // Render items
+            const container = document.getElementById('cart-items');
+            container.innerHTML = '';
+
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-12 text-gray-400">
+                        <i class="fa-solid fa-basket-shopping text-5xl mb-3 opacity-40"></i>
+                        <p class="text-sm">Tu carrito está vacío.</p>
+                        <p class="text-xs text-gray-400 mt-1">¡Agrega frutas deliciosas para comenzar!</p>
+                    </div>
+                `;
+            } else {
+                cart.forEach(item => {
+                    const row = document.createElement('div');
+                    row.className = "flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-gray-100";
+                    row.innerHTML = `
+                        <img src="${item.image}" alt="${item.name}" class="w-14 h-14 object-cover rounded-lg">
+                        <div class="flex-1">
+                            <h4 class="font-bold text-sm text-gray-800">${item.name}</h4>
+                            <p class="text-xs text-brand-green font-semibold">$${item.price.toFixed(2)} / ${item.unit}</p>
+                        </div>
+                        <div class="flex items-center gap-2 bg-white px-2 py-1 rounded-lg border border-gray-200">
+                            <button onclick="updateQuantity(${item.id}, -1)" class="text-gray-500 hover:text-red-500 text-xs px-1 font-bold">-</button>
+                            <span class="text-xs font-bold text-gray-800">${item.quantity}</span>
+                            <button onclick="updateQuantity(${item.id}, 1)" class="text-gray-500 hover:text-emerald-600 text-xs px-1 font-bold">+</button>
+                        </div>
+                    `;
+                    container.appendChild(row);
+                });
+            }
+
+            // Total
+            const totalSum = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            document.getElementById('cart-total').innerText = `$${totalSum.toFixed(2)}`;
+        }
+
+        function toggleCartDrawer() {
+            const drawer = document.getElementById('cart-drawer');
+            drawer.classList.toggle('hidden');
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // ENVIAR PEDIDO A WHATSAPP
+        function checkoutWhatsApp() {
+            if (cart.length === 0) {
+                showToast("Tu carrito está vacío", true);
+                return;
+            }
+
+            let message = "🛒 *NUEVO PEDIDO - FRUTERÍA DON MANOLO*\n\n";
+            let total = 0;
+
+            cart.forEach((item, index) => {
+                const subtotal = item.price * item.quantity;
+                total += subtotal;
+                message += `${index + 1}. *${item.name}* x${item.quantity} -> $${subtotal.toFixed(2)}\n`;
+            });
+
+            message += `\n💰 *Total a Pagar:* $${total.toFixed(2)}\n`;
+            message += `📍 *Por favor indícame la dirección de entrega.*`;
+
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/1234567890?text=${encodedMessage}`;
+
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // ENVIAR COTIZACIÓN DE CANASTA PERSONALIZADA
+        function sendCustomBasket(e) {
+            e.preventDefault();
+            const name = document.getElementById('custom-name').value;
+            const details = document.getElementById('custom-details').value;
+
+            const message = `👋 Hola, me llamo *${name}* y me gustaría cotizar una canasta personalizada:\n\n📝 *Detalles:* ${details}`;
+            const whatsappUrl = `https://wa.me/1234567890?text=${encodeURIComponent(message)}`;
+
+            window.open(whatsappUrl, '_blank');
+        }
+
+        function handleContactSubmit(e) {
+            e.preventDefault();
+            showToast("¡Mensaje enviado con éxito! Te contactaremos pronto.");
+            e.target.reset();
+        }
+
+        // NOTIFICACIONES TOAST
+        function showToast(message, isError = false) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            const toastIcon = document.getElementById('toast-icon');
+
+            toastMsg.innerText = message;
+            if (isError) {
+                toastIcon.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-amber-400"></i>`;
+            } else {
+                toastIcon.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400"></i>`;
+            }
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // INICIALIZACIÓN
+        window.onload = function() {
+            renderProducts();
+            
+            // Toggle menú móvil
+            document.getElementById('mobile-menu-btn').addEventListener('click', toggleMobileMenu);
+        };
+    </script>
+</body>
+</html>
